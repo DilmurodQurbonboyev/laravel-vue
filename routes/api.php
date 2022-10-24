@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Auth\LoginController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +15,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('check', [LoginController::class, 'check']);
+
+Auth::routes([
+    'register' => false,
+    'reset' => false,
+    'verify' => false,
+]);
+
+Route::controller(LoginController::class)
+    ->prefix('admin')
+    ->group(function () {
+        Route::get('/oneId', 'oneId')->name('oneId');
+        Route::get('/check', 'check')->name('check');
+        Route::get('/login-site', 'getLoginSiteForm')->name('getLoginSiteForm');
+        Route::post('/login-site', 'setLoginSiteForm')->name('setLoginSiteForm');
 });
+
+//Route::get('select-role', [AdminController::class, 'getRole'])->name('getRole');
+//Route::get('change-role', [AdminController::class, 'changeRole'])->name('changeRole');
+//Route::post('select-role', [AdminController::class, 'setRole'])->name('setRole');
+//
